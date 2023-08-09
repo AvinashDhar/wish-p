@@ -8,6 +8,8 @@ const FormField = ({
   value,
   handleChange,
   isSurpriseMe,
+  handleQuote,
+  isQuote,
   handleSurpriseMe,
 }) => (
   <div>
@@ -25,6 +27,15 @@ const FormField = ({
           className="font-semibold text-xs bg-[#EcECF1] py-1 px-2 rounded-[5px] text-black"
         >
           Surprise me
+        </button>
+      )}
+      {isQuote && (
+        <button
+          type="button"
+          onClick={handleQuote}
+          className="font-semibold text-xs bg-[#EcECF1] py-1 px-2 rounded-[5px] text-black"
+        >
+          Generate Quote
         </button>
       )}
     </div>

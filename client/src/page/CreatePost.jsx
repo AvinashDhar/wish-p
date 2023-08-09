@@ -12,6 +12,7 @@ const CreatePost = () => {
     name: '',
     prompt: '',
     photo: '',
+    quote: '',
   });
 
   const [generatingImg, setGeneratingImg] = useState(false);
@@ -24,11 +25,23 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt });
   };
 
+  const handleQuote = () => {
+    let url = `https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        let dataQuotes = data.quotes;
+        let randomNum = Math.floor(Math.random() * dataQuotes.length);
+        let randomQuote = dataQuotes[randomNum];
+        setForm({ ...form, quote: randomQuote.quote });
+      })
+  };
+
   const generateImage = async () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('https://wish-p.onrender.com/api/v1/dalle', {
+        const response = await fetch('http://localhost:8080/api/v1/dalle', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +70,7 @@ const CreatePost = () => {
     if (true) {
       setLoading(true);
       try {
-        const response = await fetch('https://wish-p.onrender.com/api/v1/post', {
+        const response = await fetch('http://localhost:8080/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -83,7 +96,7 @@ const CreatePost = () => {
     <section className="max-w-7xl mx-auto">
       <div>
         <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
-        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">Generate an imaginative image through DALL-E AI and share it with the community</p>
+        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">Generate an imaginative image through DALL-E AI and share it with the Team</p>
       </div>
 
       <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
@@ -95,6 +108,17 @@ const CreatePost = () => {
             placeholder="Ex., john doe"
             value={form.name}
             handleChange={handleChange}
+          />
+
+          <FormField
+            labelName="Quote"
+            type="text"
+            name="quote"
+            placeholder="Quote of the day!!"
+            value={form.quote}
+            handleChange={handleChange}
+            isQuote
+            handleQuote={handleQuote}
           />
 
           <FormField
@@ -142,12 +166,12 @@ const CreatePost = () => {
         </div>
 
         <div className="mt-10">
-          <p className="mt-2 text-[#666e75] text-[14px]">** Once you have created the image you want, you can share it with others in the community **</p>
+          <p className="mt-2 text-[#666e75] text-[14px]">** Once you have created the image you want, you can share it with others in the Team **</p>
           <button
             type="submit"
             className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
-            {loading ? 'Sharing...' : 'Share with the Community'}
+            {loading ? 'Sharing...' : 'Share with the Team'}
           </button>
         </div>
       </form>
